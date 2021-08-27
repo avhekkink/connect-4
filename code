@@ -1,0 +1,89 @@
+class Connect4():
+
+    def __init__(self):
+        self.board = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
+        self.next_row = [5,5,5,5,5,5,5]
+        self.next_turn = 1
+        
+
+    def play(self, col):
+        # check if game has already been won
+        if self.check_win() == 1 or self.check_win() == 2:
+            return "Game has finished!"
+        
+        # check if move is possible
+        if self.next_row[col] == 'full':
+            return "Column full!"
+        # make the move
+        self.board[self.next_row[col]][col] = self.next_turn
+        message = "Player " + str(self.next_turn) + " has a turn"
+        
+        # check if anyone has won
+        if self.check_win() == 1:
+            return "Player 1 wins!"
+        elif self.check_win() == 2:
+            return "Player 2 wins!"
+        
+        # update the information
+        if self.next_row[col] == 0:
+            self.next_row[col] = 'full'
+        else:
+            self.next_row[col] -= 1
+        
+        # update who's turn it is
+        if self.next_turn ==  1:
+            self.next_turn = 2
+        else:
+            self.next_turn = 1
+            
+        return message
+    
+    def check_win(self):
+        # check rows
+        for row in self.board:
+            row_str = ''.join(str(e) for e in row)
+            if '1111' in row_str:
+                return 1
+            elif '2222' in row_str:
+                return 2
+            
+        # if nothing has been returned, check columns
+        for col in range(7):
+            col_str = ''
+            for row in range(6):
+                col_str += str(self.board[row][col])
+            if '1111' in col_str:
+                return 1
+            elif '2222' in col_str:
+                return 2
+        
+        # if nothing has been returned, check diagonals
+        for NE_diag in {(3,0),(4,0),(5,0),(5,1),(5,2),(5,3)}:
+            NE_diag_str = ''
+            i,j = NE_diag[0], NE_diag[1]
+            NE_diag_str += str(self.board[i][j])
+            while i>0 and j<6:
+                i -= 1
+                j += 1
+                NE_diag_str += str(self.board[i][j])
+            if '1111' in NE_diag_str:
+                return 1
+            elif '2222' in NE_diag_str:
+                return 2
+            
+        for NW_diag in {(3,6),(4,6),(5,6),(5,5),(5,4),(5,3)}:
+            NW_diag_str = ''
+            i,j = NW_diag[0], NW_diag[1]
+            NW_diag_str += str(self.board[i][j])
+            while i>0 and j>0:
+                i -= 1
+                j -= 1
+                NW_diag_str += str(self.board[i][j])
+            if '1111' in NW_diag_str:
+                return 1
+            elif '2222' in NW_diag_str:
+                return 2
+            
+        # if nothing has been found, no-one has won yet
+        return 0
+  
