@@ -1,5 +1,5 @@
 # Connect4
-Simple connect 4 game, task was a kata set on codewars.com
+Simple connect 4 game, task was a kata set on codewars.com. Coded in python.
 
 Good example exercise on using classes, objects and methods.
 
